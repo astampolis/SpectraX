@@ -1,0 +1,40 @@
+﻿@model IEnumerable<CompanyProject.Data.Models.IoTDevice>
+
+@{
+    ViewData["Title"] = "IoT Devices";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">IoT Devices</h2>
+        <a class="btn btn-primary" asp-action="AddDevice">Add Device</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Firmware</th>
+                    <th>Last Seen</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var device in Model)
+            {
+                <tr>
+                    <td>@device.Name</td>
+                    <td>@device.Location</td>
+                    <td>
+                        <span class="badge @(device.Status == "Online" ? "bg-success" : "bg-warning text-dark")">@device.Status</span>
+                    </td>
+                    <td>@device.FirmwareVersion</td>
+                    <td>@device.LastSeen.ToString("g")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

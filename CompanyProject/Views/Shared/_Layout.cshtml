@@ -65,6 +65,33 @@
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Leave" asp-action="Index">Leaves list</a></li>
                             </ul>
                         </div>
+                        <div class="dropdown me-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                IoT Devices
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="IoTDevices" asp-action="Index">Device list</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="IoTDevices" asp-action="AddDevice">Add device</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown me-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Energy
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Energy" asp-action="Index">Overview</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Energy" asp-action="AddReading">Add reading</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Energy" asp-action="AddAlert">Add alert</a></li>
+                            </ul>
+                        </div>
+                        <div class="dropdown me-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Dashboard
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Energy dashboard</a></li>
+                            </ul>
+                        </div>
                     }
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
