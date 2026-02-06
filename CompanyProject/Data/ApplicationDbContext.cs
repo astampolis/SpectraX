@@ -90,6 +90,74 @@ namespace CompanyProject.Data
 
             });
 
+            builder.Entity<IoTDevice>().HasData(new IoTDevice[]
+            {
+                new IoTDevice
+                {
+                    Id = 1,
+                    Name = "Main Floor Meter",
+                    Location = "HQ - Floor 1",
+                    Status = "Online",
+                    FirmwareVersion = "1.4.2",
+                    LastSeen = new DateTime(2023, 1, 25, 9, 30, 0)
+                },
+                new IoTDevice
+                {
+                    Id = 2,
+                    Name = "Lab HVAC Monitor",
+                    Location = "Research Lab",
+                    Status = "Maintenance",
+                    FirmwareVersion = "1.2.9",
+                    LastSeen = new DateTime(2023, 1, 25, 8, 45, 0)
+                }
+            });
+
+            builder.Entity<EnergyReading>().HasData(new EnergyReading[]
+            {
+                new EnergyReading
+                {
+                    Id = 1,
+                    IoTDeviceId = 1,
+                    Timestamp = new DateTime(2023, 1, 25, 9, 0, 0),
+                    PowerWatts = 4200,
+                    Voltage = 230,
+                    CurrentAmps = 18.3m,
+                    EnergyKwh = 4.2m
+                },
+                new EnergyReading
+                {
+                    Id = 2,
+                    IoTDeviceId = 2,
+                    Timestamp = new DateTime(2023, 1, 25, 8, 30, 0),
+                    PowerWatts = 3200,
+                    Voltage = 230,
+                    CurrentAmps = 13.9m,
+                    EnergyKwh = 3.1m
+                }
+            });
+
+            builder.Entity<EnergyAlert>().HasData(new EnergyAlert[]
+            {
+                new EnergyAlert
+                {
+                    Id = 1,
+                    IoTDeviceId = 2,
+                    Severity = "High",
+                    Message = "HVAC consumption exceeded threshold.",
+                    TriggeredAt = new DateTime(2023, 1, 25, 8, 40, 0),
+                    Acknowledged = false
+                },
+                new EnergyAlert
+                {
+                    Id = 2,
+                    IoTDeviceId = 1,
+                    Severity = "Medium",
+                    Message = "Power factor drifting out of range.",
+                    TriggeredAt = new DateTime(2023, 1, 25, 9, 10, 0),
+                    Acknowledged = true
+                }
+            });
+
             builder.Entity<EmployeeTask>().HasData(new EmployeeTask[]
             {
                 new EmployeeTask
@@ -155,5 +223,11 @@ namespace CompanyProject.Data
     public DbSet<EmployeeTask> EmployeeTasks { get; set; }
 
     public DbSet<CompanyProject.Data.Models.EmployeeLeave> EmployeeLeave { get; set; }
+
+    public DbSet<IoTDevice> IoTDevices { get; set; }
+
+    public DbSet<EnergyReading> EnergyReadings { get; set; }
+
+    public DbSet<EnergyAlert> EnergyAlerts { get; set; }
     }
 }

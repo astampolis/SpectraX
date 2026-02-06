@@ -1,0 +1,95 @@
+﻿@model CompanyProject.Models.EnergyDashboardViewModel
+
+@{
+    ViewData["Title"] = "Energy Dashboard";
+}
+
+<div class="container py-4">
+    <h2 class="fw-bold mb-4">Energy Dashboard</h2>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted text-uppercase small">Devices</div>
+                    <div class="display-6 fw-bold">@Model.DeviceCount</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted text-uppercase small">Online Devices</div>
+                    <div class="display-6 fw-bold">@Model.ActiveDeviceCount</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted text-uppercase small">Avg Power (W)</div>
+                    <div class="display-6 fw-bold">@Model.AveragePowerWatts</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted text-uppercase small">Energy Today (kWh)</div>
+                    <div class="display-6 fw-bold">@Model.TotalEnergyKwhToday</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">Latest Readings</div>
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Device</th>
+                                <th>Timestamp</th>
+                                <th>Power (W)</th>
+                                <th>Energy (kWh)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var reading in Model.RecentReadings)
+                        {
+                            <tr>
+                                <td>@reading.IoTDevice?.Name</td>
+                                <td>@reading.Timestamp.ToString("g")</td>
+                                <td>@reading.PowerWatts</td>
+                                <td>@reading.EnergyKwh</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">Recent Alerts</div>
+                <div class="list-group list-group-flush">
+                    @foreach (var alert in Model.RecentAlerts)
+                    {
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>@alert.IoTDevice?.Name</strong>
+                                    <div class="text-muted small">@alert.TriggeredAt.ToString("g")</div>
+                                </div>
+                                <span class="badge @(alert.Severity == "High" ? "bg-danger" : "bg-warning text-dark")">@alert.Severity</span>
+                            </div>
+                            <div class="mt-2">@alert.Message</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,72 @@
+﻿@using CompanyProject.Data.Models
+@{
+    ViewData["Title"] = "Energy Management";
+    var readings = ViewBag.Readings as IEnumerable<EnergyReading> ?? Enumerable.Empty<EnergyReading>();
+    var alerts = ViewBag.Alerts as IEnumerable<EnergyAlert> ?? Enumerable.Empty<EnergyAlert>();
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold">Energy Management</h2>
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-primary" asp-action="AddReading">Add Reading</a>
+            <a class="btn btn-outline-danger" asp-action="AddAlert">Add Alert</a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">Recent Readings</div>
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>Device</th>
+                                <th>Timestamp</th>
+                                <th>Power (W)</th>
+                                <th>Voltage (V)</th>
+                                <th>Current (A)</th>
+                                <th>Energy (kWh)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var reading in readings)
+                        {
+                            <tr>
+                                <td>@reading.IoTDevice?.Name</td>
+                                <td>@reading.Timestamp.ToString("g")</td>
+                                <td>@reading.PowerWatts</td>
+                                <td>@reading.Voltage</td>
+                                <td>@reading.CurrentAmps</td>
+                                <td>@reading.EnergyKwh</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">Recent Alerts</div>
+                <div class="list-group list-group-flush">
+                    @foreach (var alert in alerts)
+                    {
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>@alert.IoTDevice?.Name</strong>
+                                    <div class="text-muted small">@alert.TriggeredAt.ToString("g")</div>
+                                </div>
+                                <span class="badge @(alert.Severity == "High" ? "bg-danger" : "bg-warning text-dark")">@alert.Severity</span>
+                            </div>
+                            <div class="mt-2">@alert.Message</div>
+                            <div class="small text-muted">Acknowledged: @(alert.Acknowledged ? "Yes" : "No")</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
