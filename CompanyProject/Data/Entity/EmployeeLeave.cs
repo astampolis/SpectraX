@@ -23,5 +23,18 @@ namespace CompanyProject.Data.Models
         [ForeignKey("Employee")]
         public string EmployeeId { get; set; }
 
+        public int? LeaveTypeId { get; set; }
+
+        [ForeignKey(nameof(LeaveTypeId))]
+        public LeaveType? LeaveType { get; set; }
+
+        public string ApprovalStatus { get; set; } = "Pending";
+
+        public string? ManagerId { get; set; }
+
+        public DateTime? DecisionDateUtc { get; set; }
+
+        public ICollection<LeaveApprovalComment> Comments { get; set; } = new List<LeaveApprovalComment>();
+
     }
 }

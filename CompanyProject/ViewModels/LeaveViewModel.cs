@@ -16,5 +16,11 @@ namespace CompanyProject.Models
         [Required]
         [Display(Name = "Leave End")]
         public DateTime LeaveEnd { get; set; }
+
+        [Display(Name = "Leave Type")]
+        public int? LeaveTypeId { get; set; }
+
+        [Display(Name = "Comment")]
+        public string? Comment { get; set; }
     }
 }

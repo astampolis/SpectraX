@@ -158,6 +158,14 @@ namespace CompanyProject.Data
                 }
             });
 
+
+            builder.Entity<LeaveType>().HasData(new LeaveType[]
+            {
+                new LeaveType { Id = 1, Name = "Paid Leave", IsPaid = true, MonthlyAccrualDays = 1.5m, YearlyAccrualDays = 18m, CarryOverLimitDays = 5m },
+                new LeaveType { Id = 2, Name = "Sick Leave", IsPaid = true, MonthlyAccrualDays = 0.8m, YearlyAccrualDays = 10m, CarryOverLimitDays = 0m },
+                new LeaveType { Id = 3, Name = "Unpaid Leave", IsPaid = false, MonthlyAccrualDays = 0m, YearlyAccrualDays = 0m, CarryOverLimitDays = 0m }
+            });
+
             builder.Entity<EmployeeTask>().HasData(new EmployeeTask[]
             {
                 new EmployeeTask
@@ -229,5 +237,13 @@ namespace CompanyProject.Data
     public DbSet<EnergyReading> EnergyReadings { get; set; }
 
     public DbSet<EnergyAlert> EnergyAlerts { get; set; }
+
+    public DbSet<LeaveType> LeaveTypes { get; set; }
+
+    public DbSet<LeaveApprovalComment> LeaveApprovalComments { get; set; }
+
+    public DbSet<TimesheetWeek> TimesheetWeeks { get; set; }
+
+    public DbSet<InAppNotification> InAppNotifications { get; set; }
     }
 }

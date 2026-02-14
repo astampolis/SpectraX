@@ -1,6 +1,8 @@
 ﻿@using CompanyProject.Data.Models
+@using System.Linq
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Employee> SignInManager
+@inject CompanyProject.Data.ApplicationDbContext DbContext
 
 <!DOCTYPE html>
 <html lang="en">
@@ -92,12 +94,24 @@
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Energy dashboard</a></li>
                             </ul>
                         </div>
+                        <div class="dropdown me-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                HR
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link text-dark" asp-controller="Leave" asp-action="Approvals">Leave approvals</a></li>
+                                <li><a class="nav-link text-dark" asp-controller="Timesheet" asp-action="Index">Timesheets</a></li>
+                                <li><a class="nav-link text-dark" asp-controller="Timesheet" asp-action="Approvals">Timesheet approvals</a></li>
+                            </ul>
+                        </div>
                     }
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
 
                         </li>
                     </ul>
+                    @{ var userId = User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value; var unread = string.IsNullOrEmpty(userId) ? 0 : DbContext.InAppNotifications.Count(n => n.EmployeeId == userId && !n.IsRead); }
+                    <a class="nav-link text-white" asp-controller="Notification" asp-action="Index"><i class="bi bi-bell"></i> @unread</a>
                     <partial name="_LoginPartial" />
                 </div>
             </div>

@@ -1,0 +1,28 @@
+@model IEnumerable<CompanyProject.Data.Models.InAppNotification>
+<h2>Notifications</h2>
+<table class="table">
+    <thead><tr><th>When</th><th>Title</th><th>Message</th><th>Status</th></tr></thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CreatedAt.ToLocalTime()</td>
+            <td>@item.Title</td>
+            <td>@item.Message</td>
+            <td>
+                @if (item.IsRead)
+                {
+                    <span>Read</span>
+                }
+                else
+                {
+                    <form asp-action="MarkRead" method="post">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <button class="btn btn-sm btn-outline-primary">Mark read</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
