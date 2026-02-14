@@ -1,0 +1,23 @@
+@model IEnumerable<CompanyProject.Data.Models.TimesheetWeek>
+<h2>Timesheet approvals</h2>
+<table class="table">
+<thead><tr><th>Employee</th><th>Week</th><th>Hours</th><th>Action</th></tr></thead>
+<tbody>
+@foreach (var item in Model)
+{
+<tr>
+    <td>@item.Employee?.Email</td>
+    <td>@item.WeekStart.ToShortDateString()</td>
+    <td>@item.TotalHours</td>
+    <td>
+        <form asp-action="Decide" method="post" class="d-flex gap-2">
+            <input type="hidden" name="Id" value="@item.Id" />
+            <input type="text" name="Comment" class="form-control" placeholder="Comment" />
+            <button class="btn btn-success" name="Approve" value="true">Approve</button>
+            <button class="btn btn-danger" name="Approve" value="false">Reject</button>
+        </form>
+    </td>
+</tr>
+}
+</tbody>
+</table>

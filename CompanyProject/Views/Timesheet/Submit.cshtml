@@ -1,0 +1,17 @@
+@model CompanyProject.Models.TimesheetViewModel
+<h2>Submit Weekly Timesheet</h2>
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="WeekStart"></label>
+        <input asp-for="WeekStart" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="TotalHours"></label>
+        <input asp-for="TotalHours" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="SubmissionComment"></label>
+        <textarea asp-for="SubmissionComment" class="form-control"></textarea>
+    </div>
+    <button class="btn btn-primary">Submit for approval</button>
+</form>

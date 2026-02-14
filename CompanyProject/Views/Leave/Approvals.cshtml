@@ -1,0 +1,24 @@
+@model IEnumerable<CompanyProject.Data.Models.EmployeeLeave>
+<h2>Pending leave approvals</h2>
+<table class="table">
+<thead><tr><th>Employee</th><th>Description</th><th>Type</th><th>Range</th><th>Decision</th></tr></thead>
+<tbody>
+@foreach (var item in Model)
+{
+<tr>
+    <td>@item.Employee?.Email</td>
+    <td>@item.LeaveDescription</td>
+    <td>@item.LeaveType?.Name</td>
+    <td>@item.LeaveStart.ToShortDateString() - @item.LeaveEnd.ToShortDateString()</td>
+    <td>
+        <form asp-action="Decide" method="post" class="d-flex gap-2">
+            <input type="hidden" name="Id" value="@item.Id" />
+            <input type="text" name="Comment" class="form-control" placeholder="Comment" />
+            <button class="btn btn-success" name="Approve" value="true">Approve</button>
+            <button class="btn btn-danger" name="Approve" value="false">Reject</button>
+        </form>
+    </td>
+</tr>
+}
+</tbody>
+</table>

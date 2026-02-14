@@ -1,0 +1,19 @@
+@model IEnumerable<CompanyProject.Data.Models.TimesheetWeek>
+
+<h2>Weekly Timesheets</h2>
+<a class="btn btn-dark mb-3" asp-action="Submit">Submit Weekly Timesheet</a>
+<table class="table">
+    <thead><tr><th>Week</th><th>Hours</th><th>Status</th><th>Manager Comment</th><th>Locked</th></tr></thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.WeekStart.ToShortDateString()</td>
+            <td>@item.TotalHours</td>
+            <td>@item.Status</td>
+            <td>@item.ManagerComment</td>
+            <td>@(item.IsLocked ? "Yes" : "No")</td>
+        </tr>
+    }
+    </tbody>
+</table>
