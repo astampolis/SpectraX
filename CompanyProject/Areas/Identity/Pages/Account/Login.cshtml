@@ -43,11 +43,8 @@
                             <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
                         </p>
                     </div>
-                    <div class="mb-2 d-flex justify-content-center p-t-115">
-                        <span class="pe-2">Not a memeber ? </span>
-                        <p class="mb-2">
-                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"> Sign up now!</a>
-                        </p>
+                    <div class="alert alert-secondary mt-4 mb-0" role="alert">
+                        New accounts are created only by administrators.
                     </div>
                 </form>
             </div>

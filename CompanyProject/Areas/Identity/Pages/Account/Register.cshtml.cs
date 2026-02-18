@@ -23,6 +23,7 @@ using CompanyProject.Tools;
 
 namespace CompanyProject.Areas.Identity.Pages.Account
 {
+    [Authorize(Roles = "Administrator")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<Employee> _signInManager;
@@ -94,7 +95,11 @@ namespace CompanyProject.Areas.Identity.Pages.Account
             [Required]
             public DateTime Birth { get; set; }
 
-            public IFormFile Image { get; set; }
+            public IFormFile? Image { get; set; }
+
+            [Required]
+            [RegularExpression("Administrator|User", ErrorMessage = "Role must be Administrator or User.")]
+            public string Role { get; set; } = "User";
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -137,13 +142,16 @@ namespace CompanyProject.Areas.Identity.Pages.Account
                 user.Name = Input.Name;
                 user.Surname = Input.Surname;
                 user.Birth = Input.Birth;
-                user.Image = ImageUtil.ToBase64Image(Input.Image);
+                if (Input.Image != null)
+                {
+                    user.Image = ImageUtil.ToBase64Image(Input.Image);
+                }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    _userManager.AddToRoleAsync(user, "User").Wait();
+                    await _userManager.AddToRoleAsync(user, Input.Role);
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -164,8 +172,7 @@ namespace CompanyProject.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return LocalRedirect(Url.Action("Employees", "Home") ?? "/");
                     }
                 }
                 foreach (var error in result.Errors)
