@@ -20,21 +20,37 @@ namespace CompanyProject.Controllers
         {
             var deviceCount = await context.IoTDevices.CountAsync();
             var activeDeviceCount = await context.IoTDevices.CountAsync(device => device.Status == "Online");
-            var hasReadings = await context.EnergyReadings.AnyAsync();
-            var averagePower = hasReadings
-                ? await context.EnergyReadings.AverageAsync(reading => reading.PowerWatts)
-                : 0m;
+            var averagePower = await context.EnergyReadings
+                .Select(reading => reading.PowerWatts)
+                .DefaultIfEmpty(0)
+                .AverageAsync();
 
             var today = DateTime.Today;
             var last24Hours = DateTime.UtcNow.AddHours(-24);
 
-            var totalEnergyToday = (await context.EnergyReadings
+            var totalEnergyToday = await context.EnergyReadings
                 .Where(reading => reading.Timestamp >= today)
                 .SumAsync(reading => (decimal?)reading.EnergyKwh)) ?? 0m;
 
             var last24HoursEnergy = (await context.EnergyReadings
                 .Where(reading => reading.Timestamp >= last24Hours)
                 .SumAsync(reading => (decimal?)reading.EnergyKwh)) ?? 0m;
+
+            var alertsQuery = context.EnergyAlerts.Include(alert => alert.IoTDevice);
+            var alertCount = await alertsQuery.CountAsync();
+            var criticalAlertCount = await alertsQuery.CountAsync(alert => alert.Severity == "High");
+
+            var recentReadings = await context.EnergyReadings
+                .Include(reading => reading.IoTDevice)
+                .OrderByDescending(reading => reading.Timestamp)
+                .Take(5)
+                .ToListAsync();
+
+            var last24HoursEnergy = await context.EnergyReadings
+                .Where(reading => reading.Timestamp >= last24Hours)
+                .Select(reading => reading.EnergyKwh)
+                .DefaultIfEmpty(0)
+                .SumAsync();
 
             var alertsQuery = context.EnergyAlerts.Include(alert => alert.IoTDevice);
             var alertCount = await alertsQuery.CountAsync();
