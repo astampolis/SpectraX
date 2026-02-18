@@ -30,9 +30,21 @@ namespace CompanyProject.Controllers
 
             var totalEnergyToday = await context.EnergyReadings
                 .Where(reading => reading.Timestamp >= today)
-                .Select(reading => reading.EnergyKwh)
-                .DefaultIfEmpty(0)
-                .SumAsync();
+                .SumAsync(reading => (decimal?)reading.EnergyKwh)) ?? 0m;
+
+            var last24HoursEnergy = (await context.EnergyReadings
+                .Where(reading => reading.Timestamp >= last24Hours)
+                .SumAsync(reading => (decimal?)reading.EnergyKwh)) ?? 0m;
+
+            var alertsQuery = context.EnergyAlerts.Include(alert => alert.IoTDevice);
+            var alertCount = await alertsQuery.CountAsync();
+            var criticalAlertCount = await alertsQuery.CountAsync(alert => alert.Severity == "High");
+
+            var recentReadings = await context.EnergyReadings
+                .Include(reading => reading.IoTDevice)
+                .OrderByDescending(reading => reading.Timestamp)
+                .Take(5)
+                .ToListAsync();
 
             var last24HoursEnergy = await context.EnergyReadings
                 .Where(reading => reading.Timestamp >= last24Hours)
