@@ -1,39 +1,55 @@
-﻿@model CompanyProject.Models.EnergyDashboardViewModel
+@model CompanyProject.Models.EnergyDashboardViewModel
 
 @{
     ViewData["Title"] = "Energy Dashboard";
 }
 
 <div class="container py-4">
-    <h2 class="fw-bold mb-4">Energy Dashboard</h2>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
+        <div>
+            <h2 class="fw-bold mb-1">Energy Dashboard</h2>
+            <p class="text-muted mb-0">Live operational overview for devices, consumption and alerts.</p>
+        </div>
+        <div class="text-md-end text-muted small">
+            Last reading:
+            @if (Model.LastReadingAt.HasValue)
+            {
+                <span class="fw-semibold text-dark">@Model.LastReadingAt.Value.ToString("g")</span>
+            }
+            else
+            {
+                <span class="fw-semibold text-dark">No readings yet</span>
+            }
+        </div>
+    </div>
 
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="card shadow-sm h-100">
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
                     <div class="text-muted text-uppercase small">Devices</div>
                     <div class="display-6 fw-bold">@Model.DeviceCount</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm h-100">
+        <div class="col-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
                     <div class="text-muted text-uppercase small">Online Devices</div>
-                    <div class="display-6 fw-bold">@Model.ActiveDeviceCount</div>
+                    <div class="display-6 fw-bold text-success">@Model.ActiveDeviceCount</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm h-100">
+        <div class="col-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
                     <div class="text-muted text-uppercase small">Avg Power (W)</div>
                     <div class="display-6 fw-bold">@Model.AveragePowerWatts</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm h-100">
+        <div class="col-6 col-lg-3">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body">
                     <div class="text-muted text-uppercase small">Energy Today (kWh)</div>
                     <div class="display-6 fw-bold">@Model.TotalEnergyKwhToday</div>
@@ -42,9 +58,36 @@
         </div>
     </div>
 
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 bg-light h-100">
+                <div class="card-body">
+                    <div class="small text-uppercase text-muted">Alerts (total)</div>
+                    <div class="h3 fw-bold mb-0">@Model.AlertCount</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 bg-light h-100">
+                <div class="card-body">
+                    <div class="small text-uppercase text-muted">High severity alerts</div>
+                    <div class="h3 fw-bold text-danger mb-0">@Model.CriticalAlertCount</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 bg-light h-100">
+                <div class="card-body">
+                    <div class="small text-uppercase text-muted">Energy (last 24h)</div>
+                    <div class="h3 fw-bold mb-0">@Model.Last24HoursEnergyKwh</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row g-4">
         <div class="col-lg-7">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white">Latest Readings</div>
                 <div class="table-responsive">
                     <table class="table table-striped mb-0 align-middle">
@@ -57,36 +100,52 @@
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach (var reading in Model.RecentReadings)
-                        {
-                            <tr>
-                                <td>@reading.IoTDevice?.Name</td>
-                                <td>@reading.Timestamp.ToString("g")</td>
-                                <td>@reading.PowerWatts</td>
-                                <td>@reading.EnergyKwh</td>
-                            </tr>
-                        }
+                            @if (!Model.RecentReadings.Any())
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">No energy readings available yet.</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @foreach (var reading in Model.RecentReadings)
+                                {
+                                    <tr>
+                                        <td>@(reading.IoTDevice?.Name ?? "Unknown")</td>
+                                        <td>@reading.Timestamp.ToString("g")</td>
+                                        <td>@reading.PowerWatts</td>
+                                        <td>@reading.EnergyKwh</td>
+                                    </tr>
+                                }
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
         <div class="col-lg-5">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white">Recent Alerts</div>
                 <div class="list-group list-group-flush">
-                    @foreach (var alert in Model.RecentAlerts)
+                    @if (!Model.RecentAlerts.Any())
                     {
-                        <div class="list-group-item">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <strong>@alert.IoTDevice?.Name</strong>
-                                    <div class="text-muted small">@alert.TriggeredAt.ToString("g")</div>
+                        <div class="list-group-item text-muted py-4">No alerts detected.</div>
+                    }
+                    else
+                    {
+                        @foreach (var alert in Model.RecentAlerts)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <strong>@(alert.IoTDevice?.Name ?? "Unknown")</strong>
+                                        <div class="text-muted small">@alert.TriggeredAt.ToString("g")</div>
+                                    </div>
+                                    <span class="badge @(alert.Severity == "High" ? "bg-danger" : "bg-warning text-dark")">@alert.Severity</span>
                                 </div>
-                                <span class="badge @(alert.Severity == "High" ? "bg-danger" : "bg-warning text-dark")">@alert.Severity</span>
+                                <div class="mt-2">@alert.Message</div>
                             </div>
-                            <div class="mt-2">@alert.Message</div>
-                        </div>
+                        }
                     }
                 </div>
             </div>

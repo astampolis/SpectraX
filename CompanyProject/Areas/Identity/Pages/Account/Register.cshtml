@@ -1,87 +1,77 @@
-﻿@page
+@page
 @model RegisterModel
 
-<section class="h-100">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col">
-                <div class="card card-registration my-4">
-                    <div class="row g-0">
-                        <div class="col-xl-6 d-none d-xl-block">
-                            <img src="/img/employees.jpg"
-                                 alt="Sample photo" class="img-fluid"
-                                 style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="card-body p-md-5 text-black">
-                                <h3 class="mb-5">Employee registration form</h3>
-                                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                                    <div class="row">
-                                        <div class="col-md-6 mb-5">
-                                            <div class="form-outline">
-                                                <label class="form-label" asp-for="Input.Name"></label>
-                                                <input type="text" class="form-control form-control-lg" asp-for="Input.Name" />
-                                                <span asp-validation-for="Input.Name" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-5">
-                                            <div class="form-outline">
-                                                <label class="form-label" asp-for="Input.Surname"></label>
-                                                <input type="text" class="form-control form-control-lg" asp-for="Input.Surname" />
-                                                <span asp-validation-for="Input.Surname" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
+@{
+    ViewData["Title"] = "Create user";
+}
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-5">
-                                            <div class="form-outline">
-                                                <label class="form-label" asp-for="Input.Email"></label>
-                                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                                <input asp-for="Input.Email" class="form-control form-control-lg" autocomplete="username" aria-required="true" />
-                                                <span asp-validation-for="Input.Email" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 mb-5">
-                                            <div class="form-outline">
-                                                <label class="form-label" asp-for="Input.Birth"></label>
-                                                <input class="form-control form-control-lg" asp-for="Input.Birth" />
-                                                <span asp-validation-for="Input.Birth" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="fw-bold mb-1">Create user account</h2>
+                    <p class="text-muted mb-4">Only administrators can access this page and create new accounts.</p>
 
-                                    <div class="form-outline mb-5">
-                                        <label class="form-label" asp-for="Input.Image"></label>
-                                        <input class="form-control form-control-lg" asp-for="Input.Image" type="file" placeholder="Image" />
-                                        <span asp-validation-for="Input.Image" class="text-danger"></span>
-                                    </div>
+                    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                                    <div class="form-outline mb-5">
-                                        <label class="form-label" asp-for="Input.Password"></label>
-                                        <input class="form-control form-control-lg" asp-for="Input.Password" autocomplete="new-password" aria-required="true" />
-                                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                                    </div>
-
-                                    <div class="form-outline mb-5">
-                                        <label class="form-label" asp-for="Input.ConfirmPassword"></label>
-                                        <input asp-for="Input.ConfirmPassword" class="form-control form-control-lg" autocomplete="new-password" aria-required="true" />
-                                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                                    </div>
-
-                                    <div class="d-flex mx-4 mb-3 mb-lg-4">
-                                        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-                                    </div>
-                                </form>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Input.Name"></label>
+                                <input type="text" class="form-control" asp-for="Input.Name" />
+                                <span asp-validation-for="Input.Name" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Input.Surname"></label>
+                                <input type="text" class="form-control" asp-for="Input.Surname" />
+                                <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Input.Email"></label>
+                                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Input.Birth"></label>
+                                <input class="form-control" asp-for="Input.Birth" />
+                                <span asp-validation-for="Input.Birth" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Input.Password"></label>
+                                <input class="form-control" asp-for="Input.Password" autocomplete="new-password" aria-required="true" />
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Input.ConfirmPassword"></label>
+                                <input class="form-control" asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" />
+                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Input.Role"></label>
+                                <select class="form-select" asp-for="Input.Role">
+                                    <option value="User">User</option>
+                                    <option value="Administrator">Administrator</option>
+                                </select>
+                                <span asp-validation-for="Input.Role" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Input.Image"></label>
+                                <input class="form-control" asp-for="Input.Image" type="file" />
+                                <span asp-validation-for="Input.Image" class="text-danger"></span>
                             </div>
                         </div>
-                    </div>
+
+                        <div class="mt-4 d-flex gap-2">
+                            <button id="registerSubmit" type="submit" class="btn btn-dark px-4">Create user</button>
+                            <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Employees">Back to employees</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</section>
-
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
