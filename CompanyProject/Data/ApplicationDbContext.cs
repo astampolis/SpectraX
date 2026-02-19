@@ -36,6 +36,9 @@ namespace CompanyProject.Data
                 }
             });
 
+            builder.Entity<EmployeeTask>()
+                .HasIndex(x => new { x.EmployeeId, x.TaskStart, x.TaskEnd });
+
             builder.Entity<Employee>().HasData(new Employee[]
             {
                 new Employee{ 
