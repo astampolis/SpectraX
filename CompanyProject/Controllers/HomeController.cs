@@ -84,6 +84,7 @@ namespace CompanyProject.Controllers
                 Email = employee.Email,
                 Name = employee.Name,
                 Surname = employee.Surname,
+                Department = employee.Department,
             };
             var roles = userManager.GetRolesAsync(employee).Result;
             if(roles.Count() > 0)
@@ -110,6 +111,7 @@ namespace CompanyProject.Controllers
                 employee.Name = model.Name;
                 employee.Birth = model.Birth;
                 employee.Email = model.Email;
+                employee.Department = model.Department;
 
                 if(!string.IsNullOrEmpty(model.Password))
                 {
@@ -183,6 +185,7 @@ namespace CompanyProject.Controllers
                     Surname = model.Surname,
                     Name = model.Name,
                     Birth = model.Birth,
+                    Department = model.Department,
                     Image = ImageUtil.ToBase64Image(model.Image)
                 };
                 userManager.CreateAsync(user, model.Password).Wait();

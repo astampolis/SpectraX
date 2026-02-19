@@ -29,6 +29,10 @@ namespace CompanyProject.Models
         [Required]
         public string Role { get; set; }
 
+        [Display(Name = "Department")]
+        [MaxLength(100)]
+        public string? Department { get; set; }
+
         public IFormFile Image { get; set; }
     }
 }
