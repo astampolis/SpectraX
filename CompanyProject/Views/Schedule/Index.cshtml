@@ -1,0 +1,42 @@
+@model CompanyProject.ViewModels.Schedule.ScheduleIndexViewModel
+<h2>Schedule Overview</h2>
+<form method="get" class="row g-2 mb-3">
+    <div class="col"><input name="UserId" value="@Model.UserId" class="form-control" placeholder="User Id" /></div>
+    <div class="col"><input name="Department" value="@Model.Department" class="form-control" placeholder="Department" /></div>
+    <div class="col"><input type="date" name="FromDate" value="@Model.FromDate?.ToString("yyyy-MM-dd")" class="form-control" /></div>
+    <div class="col"><input type="date" name="ToDate" value="@Model.ToDate?.ToString("yyyy-MM-dd")" class="form-control" /></div>
+    <div class="col"><button class="btn btn-primary">Filter</button></div>
+</form>
+<table class="table table-bordered" id="schedule-table">
+    <thead><tr><th>Date</th><th>Employee</th><th>Department</th><th>Shift</th><th>Attendance</th></tr></thead>
+    <tbody>
+    @foreach (var shift in Model.Shifts)
+    {
+        <tr>
+            <td>@shift.StartAt.ToString("yyyy-MM-dd")</td>
+            <td>@(shift.Employee?.Name) @(shift.Employee?.Surname)</td>
+            <td>@shift.Department</td>
+            <td>@shift.StartAt.ToString("HH:mm") - @shift.EndAt.ToString("HH:mm")</td>
+            <td><button type="button" class="btn btn-sm btn-outline-info attendance-btn" data-user="@shift.EmployeeId" data-date="@shift.StartAt.ToString("yyyy-MM-dd")">Hover details</button></td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div id="attendance-popover" class="alert alert-secondary" style="display:none;"></div>
+
+<script>
+document.querySelectorAll('.attendance-btn').forEach(function(btn){
+    btn.addEventListener('mouseenter', function(){
+        const userId = btn.getAttribute('data-user');
+        const date = btn.getAttribute('data-date');
+        fetch(`/Schedule/DailyDetails?employeeId=${userId}&date=${date}`)
+            .then(r => r.json())
+            .then(d => {
+                const pop = document.getElementById('attendance-popover');
+                pop.style.display = 'block';
+                pop.innerText = `Clock-in: ${d.clockIn} | Clock-out: ${d.clockOut} | Total: ${d.totalHours}h`;
+            });
+    });
+});
+</script>

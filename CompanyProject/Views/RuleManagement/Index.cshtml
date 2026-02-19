@@ -1,0 +1,23 @@
+@model IEnumerable<CompanyProject.Data.Models.SystemRule>
+<h2>System Rules</h2>
+<a asp-action="Create" class="btn btn-primary mb-2">Create Rule</a>
+<table class="table table-striped">
+    <thead><tr><th>Code</th><th>Name</th><th>Enabled</th><th>Updated</th><th></th></tr></thead>
+    <tbody>
+@foreach (var rule in Model)
+{
+    <tr>
+        <td>@rule.Code</td>
+        <td>@rule.Name</td>
+        <td>
+            <form asp-action="Toggle" method="post" class="d-inline">
+                <input type="hidden" name="id" value="@rule.Id" />
+                <button class="btn btn-sm @(rule.IsEnabled ? "btn-success" : "btn-secondary")">@(rule.IsEnabled ? "Enabled" : "Disabled")</button>
+            </form>
+        </td>
+        <td>@rule.UpdatedAt.ToString("u")</td>
+        <td><a asp-action="Edit" asp-route-id="@rule.Id" class="btn btn-sm btn-outline-primary">Edit</a></td>
+    </tr>
+}
+    </tbody>
+</table>

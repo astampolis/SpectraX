@@ -2,6 +2,8 @@ using CompanyProject.Data;
 using CompanyProject.Data.Models;
 using CompanyProject.Data.Repositories;
 using CompanyProject.Services;
+using CompanyProject.Services.Attendance;
+using CompanyProject.Services.Rules;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,9 +27,12 @@ builder.Services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireC
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddMemoryCache();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IRuleEvaluator, RuleEvaluator>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
 var app = builder.Build();
 
