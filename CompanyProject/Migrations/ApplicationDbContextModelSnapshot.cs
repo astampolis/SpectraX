@@ -112,9 +112,9 @@ namespace CompanyProject.Migrations
                             Name = "Admin",
                             NormalizedEmail = "ADMIN@COMPANY.PL",
                             NormalizedUserName = "ADMIN@COMPANY.PL",
-                            PasswordHash = "AKbHTLLOeUi092mWIJEGlXaTSNW2D51aww2KbXHkl2bia1US19twlIXXZ3gv2S1jdA==",
+                            PasswordHash = "AFPtWy+qlfMLcSPPsPVDEyEtTXCF+127UfydPckdVtVuRszKyw8VNlSwEG2HOIzxPg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bccb49b3-4355-41fc-9b4a-6deab244134c",
+                            SecurityStamp = "850db7c2-9181-4bb9-8f3d-6feacfab7e97",
                             Surname = "Admin",
                             TwoFactorEnabled = false,
                             UserName = "admin@company.pl"
@@ -132,9 +132,9 @@ namespace CompanyProject.Migrations
                             Name = "Dawid",
                             NormalizedEmail = "DAWIDMIELKE.TRI@GMAIL.COM",
                             NormalizedUserName = "DAWIDMIELKE.TRI@GMAIL.COM",
-                            PasswordHash = "AI4++yl4Y+G6v5tjDXOfh0mIA5cygU4U7AI+qPcmf9hUy6k86/EWTobA31cEgKXPWw==",
+                            PasswordHash = "AMzDJnJ+bczWSLp+UoX2GvibI4k3zIoATnbV8AWc6Nh8pXoucYSZdZaZwVLsUkcHQA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7b966a54-eea1-494e-b4b2-24e667d94a84",
+                            SecurityStamp = "a8b72274-8a78-49f5-8cb8-4e9c2b4e1e91",
                             Surname = "Mielke",
                             TwoFactorEnabled = false,
                             UserName = "dawidmielke.tri@gmail.com"
@@ -152,9 +152,9 @@ namespace CompanyProject.Migrations
                             Name = "Ola",
                             NormalizedEmail = "OLA.NOWAK@GMAIL.COM",
                             NormalizedUserName = "OLA.NOWAK@GMAIL.COM",
-                            PasswordHash = "AFdoq7r3W0/n4BWkEnNnfmP0KvVPxPqTa+0P1wR8jLD1UaB3bNO1+TxqhbanFsfzRw==",
+                            PasswordHash = "AAPh7biVjeWCSeUbn3uI2cOq0mnJromaUIt2OD7kedUL7aoZYXXyvPu8SYDriTXktw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e38eccbe-6bd2-47d3-9071-c6edb8b556f3",
+                            SecurityStamp = "402c0c7e-45d7-4dd1-9d28-f02bfd36ebdb",
                             Surname = "Nowak",
                             TwoFactorEnabled = false,
                             UserName = "ola.nowak@gmail.com"
@@ -168,6 +168,13 @@ namespace CompanyProject.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ApprovalStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DecisionDateUtc")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("EmployeeId")
                         .IsRequired()
@@ -183,9 +190,17 @@ namespace CompanyProject.Migrations
                     b.Property<DateTime>("LeaveStart")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("LeaveTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ManagerId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
+
+                    b.HasIndex("LeaveTypeId");
 
                     b.ToTable("EmployeeLeave");
 
@@ -193,6 +208,7 @@ namespace CompanyProject.Migrations
                         new
                         {
                             Id = 1,
+                            ApprovalStatus = "Pending",
                             EmployeeId = "4808c606-89cf-4a92-8ff6-33074a34a335",
                             LeaveDescription = "Urlop Admina",
                             LeaveEnd = new DateTime(2023, 1, 25, 21, 0, 0, 0, DateTimeKind.Unspecified),
@@ -201,6 +217,7 @@ namespace CompanyProject.Migrations
                         new
                         {
                             Id = 3,
+                            ApprovalStatus = "Pending",
                             EmployeeId = "ed3f4a9b-6a9d-4514-9197-64c599ca7cde",
                             LeaveDescription = "Urlop Użytkownika",
                             LeaveEnd = new DateTime(2023, 1, 25, 9, 0, 0, 0, DateTimeKind.Unspecified),
@@ -209,6 +226,7 @@ namespace CompanyProject.Migrations
                         new
                         {
                             Id = 4,
+                            ApprovalStatus = "Pending",
                             EmployeeId = "0463448f-fe47-41ab-9e99-b0245c4e7e84",
                             LeaveDescription = "Urlop Oli",
                             LeaveEnd = new DateTime(2023, 2, 25, 9, 0, 0, 0, DateTimeKind.Unspecified),
@@ -387,6 +405,41 @@ namespace CompanyProject.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CompanyProject.Data.Models.InAppNotification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("InAppNotifications");
+                });
+
             modelBuilder.Entity("CompanyProject.Data.Models.IoTDevice", b =>
                 {
                     b.Property<int>("Id")
@@ -440,6 +493,138 @@ namespace CompanyProject.Migrations
                         });
                 });
 
+            modelBuilder.Entity("CompanyProject.Data.Models.LeaveApprovalComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeLeaveId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeLeaveId");
+
+                    b.ToTable("LeaveApprovalComments");
+                });
+
+            modelBuilder.Entity("CompanyProject.Data.Models.LeaveType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("CarryOverLimitDays")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MonthlyAccrualDays")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<decimal>("YearlyAccrualDays")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LeaveTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CarryOverLimitDays = 5m,
+                            IsPaid = true,
+                            MonthlyAccrualDays = 1.5m,
+                            Name = "Paid Leave",
+                            YearlyAccrualDays = 18m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CarryOverLimitDays = 0m,
+                            IsPaid = true,
+                            MonthlyAccrualDays = 0.8m,
+                            Name = "Sick Leave",
+                            YearlyAccrualDays = 10m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CarryOverLimitDays = 0m,
+                            IsPaid = false,
+                            MonthlyAccrualDays = 0m,
+                            Name = "Unpaid Leave",
+                            YearlyAccrualDays = 0m
+                        });
+                });
+
+            modelBuilder.Entity("CompanyProject.Data.Models.TimesheetWeek", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ManagerComment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubmissionComment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("TotalHours")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("WeekStart")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("TimesheetWeeks");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -470,14 +655,14 @@ namespace CompanyProject.Migrations
                         new
                         {
                             Id = "40c6bc97-f08f-41e4-bf60-ccd30ff4ab41",
-                            ConcurrencyStamp = "d666bf41-4da7-44fa-985d-ff54b0727585",
+                            ConcurrencyStamp = "b502bd66-7d09-4bce-8bf1-70666acdd4c1",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "33244a2a-62a8-4f91-83ac-6435a1348629",
-                            ConcurrencyStamp = "de3e0c07-1eec-4b62-a9d0-250b0a7f5695",
+                            ConcurrencyStamp = "068b6598-965c-47b4-ada4-58eca2e0e28f",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -618,7 +803,13 @@ namespace CompanyProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CompanyProject.Data.Models.LeaveType", "LeaveType")
+                        .WithMany()
+                        .HasForeignKey("LeaveTypeId");
+
                     b.Navigation("Employee");
+
+                    b.Navigation("LeaveType");
                 });
 
             modelBuilder.Entity("CompanyProject.Data.Models.EmployeeTask", b =>
@@ -652,6 +843,39 @@ namespace CompanyProject.Migrations
                         .IsRequired();
 
                     b.Navigation("IoTDevice");
+                });
+
+            modelBuilder.Entity("CompanyProject.Data.Models.InAppNotification", b =>
+                {
+                    b.HasOne("CompanyProject.Data.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("CompanyProject.Data.Models.LeaveApprovalComment", b =>
+                {
+                    b.HasOne("CompanyProject.Data.Models.EmployeeLeave", "EmployeeLeave")
+                        .WithMany("Comments")
+                        .HasForeignKey("EmployeeLeaveId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EmployeeLeave");
+                });
+
+            modelBuilder.Entity("CompanyProject.Data.Models.TimesheetWeek", b =>
+                {
+                    b.HasOne("CompanyProject.Data.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -703,6 +927,11 @@ namespace CompanyProject.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CompanyProject.Data.Models.EmployeeLeave", b =>
+                {
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("CompanyProject.Data.Models.IoTDevice", b =>
