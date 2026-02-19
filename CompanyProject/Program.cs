@@ -36,10 +36,12 @@ builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
 var app = builder.Build();
 
+await DatabaseBootstrapper.EnsureAttendanceAndRulesSchemaAsync(app.Services);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
 }
 else
 {
