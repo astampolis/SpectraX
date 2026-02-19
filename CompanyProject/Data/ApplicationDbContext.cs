@@ -22,21 +22,6 @@ namespace CompanyProject.Data
         {
             base.OnModelCreating(builder);
 
-
-            builder.Entity<SystemRule>()
-                .HasIndex(x => x.Code)
-                .IsUnique();
-
-            builder.Entity<SystemRule>()
-                .Property(x => x.RowVersion)
-                .IsRowVersion();
-
-            builder.Entity<SystemRule>().HasData(
-                new SystemRule { Id = 1, Name = "Flexible Schedule", Code = "FLEXIBLE_SCHEDULE", IsEnabled = false, ValueJson = "{\"AllowedStartFrom\":\"08:00\",\"AllowedStartTo\":\"10:00\",\"MinRequiredHours\":8}", UpdatedAt = new DateTime(2024,1,1), UpdatedBy = "seed" },
-                new SystemRule { Id = 2, Name = "Late Arrival", Code = "LATE_ARRIVAL", IsEnabled = false, ValueJson = "{\"GraceMinutes\":10,\"PointsPerLate\":1}", UpdatedAt = new DateTime(2024,1,1), UpdatedBy = "seed" },
-                new SystemRule { Id = 3, Name = "Shift Swap", Code = "SHIFT_SWAP", IsEnabled = true, ValueJson = null, UpdatedAt = new DateTime(2024,1,1), UpdatedBy = "seed" }
-            );
-
             builder.Entity<IdentityRole>().HasData(new IdentityRole[]
             {
                 new IdentityRole{ 
@@ -260,20 +245,5 @@ namespace CompanyProject.Data
     public DbSet<TimesheetWeek> TimesheetWeeks { get; set; }
 
     public DbSet<InAppNotification> InAppNotifications { get; set; }
-
-    public DbSet<SystemRule> SystemRules { get; set; }
-
-    public DbSet<Shift> Shifts { get; set; }
-
-    public DbSet<ShiftSwapRequest> ShiftSwapRequests { get; set; }
-
-    public DbSet<AttendanceEntry> AttendanceEntries { get; set; }
-
-    public DbSet<AttendancePenalty> AttendancePenalties { get; set; }
-
-    public DbSet<AttendanceRequest> AttendanceRequests { get; set; }
-
-    public DbSet<AuditLog> AuditLogs { get; set; }
-
     }
 }
