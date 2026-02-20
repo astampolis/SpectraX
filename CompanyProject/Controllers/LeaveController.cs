@@ -111,14 +111,30 @@ namespace CompanyProject.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
-        public IActionResult Approvals()
+        public IActionResult Approvals(string? employeeSearch)
         {
-            var pendingLeaves = _context.EmployeeLeave
+            var pendingLeavesQuery = _context.EmployeeLeave
                 .Include(x => x.Employee)
                 .Include(x => x.LeaveType)
                 .Where(x => x.ApprovalStatus == "Pending")
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(employeeSearch))
+            {
+                var normalizedSearch = employeeSearch.Trim();
+                pendingLeavesQuery = pendingLeavesQuery.Where(x =>
+                    (x.Employee != null && x.Employee.Email != null && x.Employee.Email.Contains(normalizedSearch)) ||
+                    (x.Employee != null && x.Employee.Name != null && x.Employee.Name.Contains(normalizedSearch)) ||
+                    (x.Employee != null && x.Employee.Surname != null && x.Employee.Surname.Contains(normalizedSearch)) ||
+                    (x.Employee != null && x.Employee.Name != null && x.Employee.Surname != null && (x.Employee.Name + " " + x.Employee.Surname).Contains(normalizedSearch))
+                );
+            }
+
+            var pendingLeaves = pendingLeavesQuery
                 .OrderBy(x => x.LeaveStart)
                 .ToList();
+
+            ViewBag.EmployeeSearch = employeeSearch;
             return View(pendingLeaves);
         }
 
