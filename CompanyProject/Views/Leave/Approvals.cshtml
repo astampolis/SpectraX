@@ -1,12 +1,28 @@
 @model IEnumerable<CompanyProject.Data.Models.EmployeeLeave>
 <h2>Pending leave approvals</h2>
+
+<form method="get" asp-action="Approvals" class="row g-2 mb-3">
+    <div class="col-md-6">
+        <input
+            type="text"
+            name="employeeSearch"
+            value="@ViewBag.EmployeeSearch"
+            class="form-control"
+            placeholder="Search employee by name or email" />
+    </div>
+    <div class="col-auto d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="Approvals" class="btn btn-outline-secondary">Clear</a>
+    </div>
+</form>
+
 <table class="table">
 <thead><tr><th>Employee</th><th>Description</th><th>Type</th><th>Range</th><th>Decision</th></tr></thead>
 <tbody>
 @foreach (var item in Model)
 {
 <tr>
-    <td>@item.Employee?.Email</td>
+    <td>@item.Employee?.Name @item.Employee?.Surname (@item.Employee?.Email)</td>
     <td>@item.LeaveDescription</td>
     <td>@item.LeaveType?.Name</td>
     <td>@item.LeaveStart.ToShortDateString() - @item.LeaveEnd.ToShortDateString()</td>
